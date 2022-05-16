@@ -27,7 +27,7 @@ pygame.display.set_caption("Snake by b4nq")
 def draw_snake(snake):
     for i in snake:
         pygame.draw.rect(WIN, GREEN, pygame.Rect(
-            i.x, i.y, SQUARE_SIZE, SQUARE_SIZE))
+            i[0], i[1], SQUARE_SIZE, SQUARE_SIZE))
 
 
 def draw_window():
@@ -36,8 +36,9 @@ def draw_window():
 
 
 def main():
-    snake = [SnakesPart(201, 201), SnakesPart(201, 176),
-             SnakesPart(201, 151), SnakesPart(201, 126)]
+    #snake = [SnakesPart(201, 201), SnakesPart(201, 176),
+    #         SnakesPart(201, 151), SnakesPart(201, 126)]
+    snake = [[201,201],[201,176],[201,151],[201,126]]
     direction = "down"
     last = pygame.time.get_ticks()
     clock = pygame.time.Clock()
@@ -60,27 +61,22 @@ def main():
         now = pygame.time.get_ticks()
         if now - last >= COOLDOWN:
             last = now
-            j = -1
-            i = len(snake)
-            '''Coś tu czasowo się pierdolneło'''
-            while i > 1:
-                j -= 1
-                i -= 1
-                snake[i] = snake[j]
 
+            for x in range(len(snake)-1,0,-1):
+                snake[x][0] = snake[x-1][0]
+                snake[x][1] = snake[x-1][1]
+            print(snake)
+                
+                
             if direction == "up":
-                snake[0].y -= 25
+            
+                snake[0][1] -= 25
             if direction == "down":
-                snake[0].y += 25
+                snake[0][1] += 25
             if direction == "right":
-                snake[0].x += 25
+                snake[0][0] += 25
             if direction == "left":
-                snake[0].x -= 25
-
-            # j = 0
-            # for i in reversed(snake):
-            #     j -= 1
-            #     i = snake[j]
+                snake[0][0] -= 25
 
         draw_window()
         draw_snake(snake)
@@ -91,4 +87,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
