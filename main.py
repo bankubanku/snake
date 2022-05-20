@@ -5,10 +5,10 @@ import random
 pygame.init()
 
 
-class SnakesPart:
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
+# class SnakesPart:
+#     def __init__(self, x, y):
+#         self.x = x
+#         self.y = y
 
 
 COOLDOWN = 500
@@ -26,6 +26,20 @@ FPS = 60
 WIDTH, HEIGHT = 500, 500
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Snake by b4nq")
+
+def get_apple_position(snake):
+    apple = [0, 0]
+    x_positions = []
+    y_positions = []
+    for x in range(1, 476, 25):
+        x_positions.append(x)
+        y_positions.append(x)
+
+    apple[0] = random.choice(x_positions)
+    apple[1] = random.choice(y_positions)
+
+    return apple
+
 
 def wait_for_key_press():
     wait = True
@@ -58,15 +72,17 @@ def draw_snake(snake):
             i[0], i[1], SQUARE_SIZE, SQUARE_SIZE))
 
 
-def draw_window():
+def draw_window(apple):
     WIN.fill(BLACK)
     board.draw_board(WIN, GREY, WIDTH, HEIGHT, 20, 20)
+    pygame.draw.rect(WIN, RED, pygame.Rect(apple[0], apple[1], SQUARE_SIZE, SQUARE_SIZE))
 
 
 def main():
     #snake = [SnakesPart(201, 201), SnakesPart(201, 176),
     #         SnakesPart(201, 151), SnakesPart(201, 126)]
     snake = [[201,201],[201,176],[201,151],[201,126]]
+    apple = get_apple_position(snake)
     direction = "down"
     last = pygame.time.get_ticks()
     clock = pygame.time.Clock()
@@ -86,7 +102,7 @@ def main():
                 if event.key == pygame.K_LEFT and (direction == "down" or direction == "up"):
                     direction = "left"
 
-        draw_window()
+        draw_window(apple)
         draw_snake(snake)
 
         now = pygame.time.get_ticks()
