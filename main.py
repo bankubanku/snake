@@ -76,7 +76,7 @@ def does_bumped_into_itself(head, snake):
             game_over()
 
 '''
-Function returns position of new part of snake 
+Function returns position of snake's new part 
 '''
 def apple_eaten(snake):
     butt = []
@@ -91,9 +91,7 @@ def apple_eaten(snake):
 
     return butt
 
-'''
-Function for getting apple position
-'''
+
 def get_apple_position(snake):
     pool = []
 
@@ -143,17 +141,13 @@ def game_over():
     pygame.display.update()
     wait_for_key_press()
 
-'''
-Function which draws snake
-'''
+
 def draw_snake(snake):
     for i in snake:
         pygame.draw.rect(WIN, GREEN, pygame.Rect(
             i[0], i[1], SQUARE_SIZE, SQUARE_SIZE))
 
-'''
-Display handler
-'''
+
 def draw_window(apple):
     WIN.fill(BLACK)
     board.draw_board(WIN, GREY, WIDTH, HEIGHT, 20, 20)
