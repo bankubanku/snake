@@ -1,5 +1,5 @@
 # snake 
-It's a simple adaptation of snake game written in pygame. 
+It's a simple adaptation of a snake game written in pygame. 
 
 ![Screenshot of the game](screenshot.png)
 ## installation
