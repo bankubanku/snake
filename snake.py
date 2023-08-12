@@ -1,5 +1,5 @@
 import pygame
-import board
+from modules import board, cube
 import random
 
 pygame.init()
