@@ -10,7 +10,7 @@ GREEN = (0, 255, 0)
 # other
 FPS = 60
 WIDTH, HEIGHT = 500, 500
-COOLDOWN = 250
+COOLDOWN = 200
 SQUARE_SIZE = 24
 GAME_OVER_FONT = pygame.font.SysFont('comicsans', 100)
 OTHER_FONT = pygame.font.SysFont('comicsans', 20)

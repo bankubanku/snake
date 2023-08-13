@@ -4,71 +4,13 @@ pygame.init()
 
 from modules import board, cube
 from modules.cube import Cube
-from modules.body import SnakesBody
+from modules.snake import Snake
 from settings import WHITE, BLACK, WIDTH, HEIGHT, FPS, GREY, RED, COOLDOWN, SQUARE_SIZE, WIN, TITLE, GAME_OVER_FONT, OTHER_FONT
 
 
 pygame.display.set_caption(TITLE)
 
-'''
-Function handles snake's head movement and reaching border
 
-# How it works?
-Function checks in which direction snake heads 
-and depently on that it changes its first part position.
-When snake reachs out of border, 
-then game_over()function is called 
-'''
-def snakes_head_movement(head):
-    if head.direction == "up":
-        head.y -= 25
-        if head.y < 0:
-            print(2)
-            game_over()
-    if head.direction == "down":
-        head.y += 25
-        if head.y >= 500:
-            print(2)
-            game_over()
-    if head.direction == "right":
-        head.x += 25
-        if head.x >= 500:
-            print(2)
-            game_over()
-    if head.direction == "left":
-        head.x -= 25
-        if head.x < 0:
-            print(2)
-            game_over()
-
-'''
-Function handles snake's body movement
-
-# How it works?
-When head (on position 0) moves, 
-snake's part on position 1 inherits head's value, 
-part on positiion 2 inherits value of position 1 and so on
-'''
-def snakes_body_movement(snake):
-    for x in range(len(snake)-1, 0, -1):
-        snake[x].x = snake[x-1].x
-        snake[x].y = snake[x-1].y
-        snake[x].direction = snake[x-1].direction
-
-
-
-'''
-Function handles situation when snake bumps into itself
-
-# How it works?
-It checks if snake's head and any of other snake's part are on the same position.
-If so, game_over() function is called
-'''
-def does_bumped_into_itself(head, snake):
-    for i in range(len(snake)-1, 1, -1):
-        if snake[i].x == head.x and snake[i].y == head.y:
-            print(1)
-            game_over()
 
 '''
 Function returns position of snake's new part 
@@ -137,12 +79,6 @@ def game_over():
     wait_for_key_press()
 
 
-# def draw_snake(snake):
-#     for i in snake:
-#         pygame.draw.rect(WIN, GREEN, pygame.Rect(
-#             i.x, i.y, SQUARE_SIZE, SQUARE_SIZE))
-
-
 def draw_window(apple):
     WIN.fill(BLACK)
     board.draw_board(20, 20)
@@ -151,7 +87,7 @@ def draw_window(apple):
 
 
 def main():    
-    snake = SnakesBody()
+    snake = Snake([Cube(201,201,"down"), Cube(201, 176, "down"), Cube(201, 151, "down"), Cube(201, 126, "down")])
     apple = get_apple_position(snake.body)
     last = pygame.time.get_ticks()
     clock = pygame.time.Clock()
@@ -175,9 +111,11 @@ def main():
         now = pygame.time.get_ticks()
         if now - last >= COOLDOWN:
             last = now
-            snakes_body_movement(snake.body)
-            does_bumped_into_itself(snake.head, snake.body)
-            snakes_head_movement(snake.head)
+            snake.body_movement()
+            did_bump_into_itself = snake.did_bump_into_itself()
+            did_bump_into_border = snake.head_movement()
+            if did_bump_into_border or did_bump_into_itself:
+                game_over()
 
         pygame.display.update()
 
