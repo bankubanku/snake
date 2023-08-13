@@ -2,6 +2,7 @@ import pygame
 from modules import board, cube
 import random
 from modules.cube import Cube
+from modules.body import SnakesBody
 
 pygame.init()
 
@@ -162,8 +163,8 @@ def draw_window(apple):
 
 
 def main():    
-    snake = [Cube(201,201,"down"), Cube(201, 176, "down"), Cube(201, 151, "down"), Cube(201, 126, "down")]
-    apple = get_apple_position(snake)
+    body = SnakesBody()
+    apple = get_apple_position(body.snake)
     last = pygame.time.get_ticks()
     clock = pygame.time.Clock()
     run = True
@@ -173,30 +174,30 @@ def main():
             if event.type == pygame.QUIT:
                 run = False
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_UP and (snake[0].direction == "right" or snake[0].direction == "left"):
-                    snake[0].direction = "up"
-                if event.key == pygame.K_DOWN and (snake[0].direction == "right" or snake[0].direction == "left"):
-                    snake[0].direction = "down"
-                if event.key == pygame.K_RIGHT and (snake[0].direction == "down" or snake[0].direction == "up"):
-                    snake[0].direction = "right"
-                if event.key == pygame.K_LEFT and (snake[0].direction == "down" or snake[0].direction == "up"):
-                    snake[0].direction = "left"
+                if event.key == pygame.K_UP and (body.head.direction == "right" or body.head.direction == "left"):
+                    body.head.direction = "up"
+                if event.key == pygame.K_DOWN and (body.head.direction == "right" or body.head.direction == "left"):
+                    body.head.direction = "down"
+                if event.key == pygame.K_RIGHT and (body.head.direction == "down" or body.head.direction == "up"):
+                    body.head.direction = "right"
+                if event.key == pygame.K_LEFT and (body.head.direction == "down" or body.head.direction == "up"):
+                    body.head.direction = "left"
 
         draw_window(apple)
-        draw_snake(snake)
+        draw_snake(body.snake)
 
         # check if snake's head and apple are on the same position
-        if apple.x == snake[0].x and apple.y == snake[0].y:
-            apple = get_apple_position(snake)
-            butt = apple_eaten(snake)
-            snake.append(butt)
+        if apple.x == body.head.x and apple.y == body.head.y:
+            apple = get_apple_position(body.snake)
+            butt = apple_eaten(body.snake)
+            body.snake.append(butt)
 
         now = pygame.time.get_ticks()
         if now - last >= COOLDOWN:
             last = now
-            snakes_body_movement(snake)
-            does_bumped_into_itself(snake[0], snake)
-            snakes_head_movement(snake[0])
+            snakes_body_movement(body.snake)
+            does_bumped_into_itself(body.head, body.snake)
+            snakes_head_movement(body.head)
 
         pygame.display.update()
 
