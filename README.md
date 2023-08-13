@@ -21,5 +21,5 @@ pip install -r requirements.txt
 
 You can run this game typing
 ```
-python snake.py
+python game.py
 ``` 
