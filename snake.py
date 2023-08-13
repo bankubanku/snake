@@ -1,26 +1,14 @@
-import pygame
-from modules import board, cube
 import random
-from modules.cube import Cube
-from modules.body import SnakesBody
-
+import pygame
 pygame.init()
 
-# colors
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
-GREY = (96, 96, 96)
-RED = (255, 0, 0)
-GREEN = (0, 255, 0)
-# settings
-FPS = 60
-WIDTH, HEIGHT = 500, 500
-COOLDOWN = 250
-SQUARE_SIZE = 24
-WIN = pygame.display.set_mode((WIDTH, HEIGHT))
-GAME_OVER_FONT = pygame.font.SysFont('comicsans', 100)
-OTHER_FONT = pygame.font.SysFont('comicsans', 20)
-pygame.display.set_caption("Snake by b4nq")
+from modules import board, cube
+from modules.cube import Cube
+from modules.body import SnakesBody
+from settings import WHITE, BLACK, WIDTH, HEIGHT, FPS, GREY, RED, COOLDOWN, SQUARE_SIZE, WIN, TITLE, GAME_OVER_FONT, OTHER_FONT
+
+
+pygame.display.set_caption(TITLE)
 
 '''
 Function handles snake's head movement and reaching border
@@ -149,22 +137,22 @@ def game_over():
     wait_for_key_press()
 
 
-def draw_snake(snake):
-    for i in snake:
-        pygame.draw.rect(WIN, GREEN, pygame.Rect(
-            i.x, i.y, SQUARE_SIZE, SQUARE_SIZE))
+# def draw_snake(snake):
+#     for i in snake:
+#         pygame.draw.rect(WIN, GREEN, pygame.Rect(
+#             i.x, i.y, SQUARE_SIZE, SQUARE_SIZE))
 
 
 def draw_window(apple):
     WIN.fill(BLACK)
-    board.draw_board(WIN, GREY, WIDTH, HEIGHT, 20, 20)
+    board.draw_board(20, 20)
     pygame.draw.rect(WIN, RED, pygame.Rect(
         apple.x, apple.y, SQUARE_SIZE, SQUARE_SIZE))
 
 
 def main():    
-    body = SnakesBody()
-    apple = get_apple_position(body.snake)
+    snake = SnakesBody()
+    apple = get_apple_position(snake.body)
     last = pygame.time.get_ticks()
     clock = pygame.time.Clock()
     run = True
@@ -173,31 +161,23 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_UP and (body.head.direction == "right" or body.head.direction == "left"):
-                    body.head.direction = "up"
-                if event.key == pygame.K_DOWN and (body.head.direction == "right" or body.head.direction == "left"):
-                    body.head.direction = "down"
-                if event.key == pygame.K_RIGHT and (body.head.direction == "down" or body.head.direction == "up"):
-                    body.head.direction = "right"
-                if event.key == pygame.K_LEFT and (body.head.direction == "down" or body.head.direction == "up"):
-                    body.head.direction = "left"
+            snake.movement(event)
 
         draw_window(apple)
-        draw_snake(body.snake)
+        snake.draw()
 
         # check if snake's head and apple are on the same position
-        if apple.x == body.head.x and apple.y == body.head.y:
-            apple = get_apple_position(body.snake)
-            butt = apple_eaten(body.snake)
-            body.snake.append(butt)
+        if apple.x == snake.head.x and apple.y == snake.head.y:
+            apple = get_apple_position(snake.body)
+            butt = apple_eaten(snake.body)
+            snake.body.append(butt)
 
         now = pygame.time.get_ticks()
         if now - last >= COOLDOWN:
             last = now
-            snakes_body_movement(body.snake)
-            does_bumped_into_itself(body.head, body.snake)
-            snakes_head_movement(body.head)
+            snakes_body_movement(snake.body)
+            does_bumped_into_itself(snake.head, snake.body)
+            snakes_head_movement(snake.head)
 
         pygame.display.update()
 
