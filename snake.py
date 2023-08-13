@@ -30,25 +30,25 @@ and depently on that it changes its first part position.
 When snake reachs out of border, 
 then game_over()function is called 
 '''
-def snakes_head_movement(snake):
-    if snake[0].direction == "up":
-        snake[0].y -= 25
-        if snake[0].y < 0:
+def snakes_head_movement(head):
+    if head.direction == "up":
+        head.y -= 25
+        if head.y < 0:
             print(2)
             game_over()
-    if snake[0].direction == "down":
-        snake[0].y += 25
-        if snake[0].y >= 500:
+    if head.direction == "down":
+        head.y += 25
+        if head.y >= 500:
             print(2)
             game_over()
-    if snake[0].direction == "right":
-        snake[0].x += 25
-        if snake[0].x >= 500:
+    if head.direction == "right":
+        head.x += 25
+        if head.x >= 500:
             print(2)
             game_over()
-    if snake[0].direction == "left":
-        snake[0].x -= 25
-        if snake[0].x < 0:
+    if head.direction == "left":
+        head.x -= 25
+        if head.x < 0:
             print(2)
             game_over()
 
@@ -87,7 +87,7 @@ Function returns position of snake's new part
 def apple_eaten(snake):
     butt = None
     if snake[-1].direction == "down":
-        butt = Cube(snake[-1].x, snake[-1].y, "down") #[snake[-1][0], snake[-1].y - 25, "down"]
+        butt = Cube(snake[-1].x, snake[-1].y, "down") 
     if snake[-1].direction == "up":
         butt = Cube(snake[-1].x, snake[-1].y + 25, "up")
     if snake[-1].direction == "right":
@@ -196,7 +196,7 @@ def main():
             last = now
             snakes_body_movement(snake)
             does_bumped_into_itself(snake[0], snake)
-            snakes_head_movement(snake)
+            snakes_head_movement(snake[0])
 
         pygame.display.update()
 
