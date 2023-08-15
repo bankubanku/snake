@@ -54,9 +54,10 @@ def wait_for_key_press():
     wait = True
     while wait:
         for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                    pygame.quit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    wait = False
                     pygame.quit()
                 elif event.key == pygame.K_RETURN:
                     main()
